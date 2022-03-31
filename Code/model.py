@@ -3,7 +3,14 @@ import os
 import tensorflow as tf
 import pandas as pd
 from tensorflow import keras
+from tensorflow.keras.utils import to_categorical
 import matplotlib.pyplot as plt
+from keras.layers import Flatten, Dense, Dropout, BatchNormalization, Conv2D
+from keras.models import Sequential
+from keras import regularizers
+from keras.initializers import RandomNormal
+
+
 
 path = os.getcwd()
 
@@ -29,3 +36,33 @@ train_images = np.reshape(train_images, (-1, 28,28,1)) / 255
 test_images = np.reshape(test_images, (-1, 28, 28,1)) / 255
 plt.imshow(show_img)
 plt.show()
+
+
+
+train_size = 40000
+
+labels = train_lb_df['label'].tolist()
+x_train = train_images[:train_size]
+y_train = np.array(labels)[:train_size]
+
+x_val = train_images[train_size:]
+y_val = np.array(labels)[train_size:]
+
+
+y_train = to_categorical(y_train)
+y_val = to_categorical(y_val)
+
+
+model = Sequential()
+
+model.add(Conv2D(8, 3, strides=1, activation='relu', input_shape=(28,28,1)))
+model.add(Flatten())
+model.add(Dense(512, activation='relu', kernel_initializer=RandomNormal(mean=0.0, stddev=0.0625, seed=None)))
+model.add(10, activation = 'softmax')
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.summary()
+
+history = model.fit(x_train, y_train, epochs=50, batch_size=64, validation_data=(x_val, y_val), callbacks=[model_checkpoint_callback])
+
+
