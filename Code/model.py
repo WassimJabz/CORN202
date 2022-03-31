@@ -65,4 +65,6 @@ model.summary()
 
 history = model.fit(x_train, y_train, epochs=50, batch_size=64, validation_data=(x_val, y_val))
 
+model.save('saved_model/my_model')
+
 
