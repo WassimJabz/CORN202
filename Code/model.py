@@ -58,11 +58,11 @@ model = Sequential()
 model.add(Conv2D(8, 3, strides=1, activation='relu', input_shape=(28,28,1)))
 model.add(Flatten())
 model.add(Dense(512, activation='relu', kernel_initializer=RandomNormal(mean=0.0, stddev=0.0625, seed=None)))
-model.add(10, activation = 'softmax')
+model.add(Dense(10, activation = 'softmax'))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model.summary()
 
-history = model.fit(x_train, y_train, epochs=50, batch_size=64, validation_data=(x_val, y_val), callbacks=[model_checkpoint_callback])
+history = model.fit(x_train, y_train, epochs=50, batch_size=64, validation_data=(x_val, y_val))
 
 
