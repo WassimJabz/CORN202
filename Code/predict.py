@@ -10,7 +10,7 @@ from keras.models import Sequential
 from keras import regularizers
 from keras.initializers import RandomNormal
 
-model = tf.keras.models.load_model("saved_model/my_model")
+model = tf.keras.models.load_model("saved_model/Model 3")
 
 path = os.getcwd()
 DATASET_PATH = os.path.join(path,"dataset\\")
