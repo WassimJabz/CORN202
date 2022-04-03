@@ -14,8 +14,10 @@ from keras.initializers import RandomNormal
 import seaborn as sns
 from sklearn.model_selection import StratifiedKFold , KFold ,RepeatedKFold
 from sklearn.model_selection import train_test_split
-
-
+from skimage import data, img_as_float
+from skimage import exposure
+from skimage import data, img_as_float
+from skimage import exposure
 
 
 path = os.getcwd()
@@ -34,14 +36,30 @@ train_lb_df.head()
 
 TRAIN_NPY = DATASET_PATH + 'train_images.npy'
 TEST_NPY = DATASET_PATH + 'test_images.npy'
-train_images = np.load(TRAIN_NPY)
-test_images = np.load(TEST_NPY)
+train_images_us = np.load(TRAIN_NPY)
+test_images_us = np.load(TEST_NPY)
 # print(train_images[0])
-show_img = np.reshape(test_images[33], (28,28))
-train_images = np.reshape(train_images, (-1, 28,28,1)) / 255
-test_images = np.reshape(test_images, (-1, 28, 28,1)) / 255
-plt.imshow(show_img,cmap="Greys_r")
-plt.show()
+
+
+
+def contrast_stretch(img_set_us):
+    img_set = []
+    for img_us in img_set_us:
+        img_us = np.reshape(img_us, (28,28)) / 255
+        p2, p98 = np.percentile(img_us, (2, 98))
+        img =  exposure.rescale_intensity(img_us, in_range=(p2, p98))
+        img_set.append(img)
+    return img_set
+
+train_images = contrast_stretch(train_images_us)
+test_images = contrast_stretch(test_images_us)
+
+show_img = np.reshape(test_images[38], (28,28))  
+
+train_images = np.reshape(train_images, (-1, 28,28,1)) 
+
+test_images = np.reshape(test_images, (-1, 28, 28,1))
+
 
 
 class MyThresholdCallback(tf.keras.callbacks.Callback):
@@ -124,9 +142,9 @@ for train, test in kFold.split(x_train,y_train):
     print('------------------------------------------------------------------------')
     print(f'Training for fold {fold_no} ...')
 
-    my_callback = MyThresholdCallback(threshold=0.9105)
+    my_callback = MyThresholdCallback(threshold=0.9100)
 
-    history = model.fit(x_train[train], fold_y_train, epochs=250, batch_size=256, validation_data=(x_train[test], fold_y_test),callbacks=[my_callback])
+    history = model.fit(x_train[train], fold_y_train, epochs=180, batch_size=256, validation_data=(x_train[test], fold_y_test),callbacks=[my_callback])
 
     model.save(f'saved_model/my_model/fold{fold_no}')
 
