@@ -7,7 +7,7 @@ Final project for the MAIS202 bootcamp, about classifying images of clothing ite
 
 2- Run model.py to train a new model
 
-3- Run predict.py with the path of where the model is saved to generate predictions
+3- Run predict.py with the path of where the model is saved (line 43) to generate predictions
 
 ## Dependencies:
 - Numpy
