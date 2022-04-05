@@ -36,29 +36,17 @@ train_lb_df.head()
 
 TRAIN_NPY = DATASET_PATH + 'train_images.npy'
 TEST_NPY = DATASET_PATH + 'test_images.npy'
-train_images_us = np.load(TRAIN_NPY)
-test_images_us = np.load(TEST_NPY)
+train_images = np.load(TRAIN_NPY)
+test_images = np.load(TEST_NPY)
 # print(train_images[0])
 
 
 
-def contrast_stretch(img_set_us):
-    img_set = []
-    for img_us in img_set_us:
-        img_us = np.reshape(img_us, (28,28)) / 255
-        p2, p98 = np.percentile(img_us, (2, 98))
-        img =  exposure.rescale_intensity(img_us, in_range=(p2, p98))
-        img_set.append(img)
-    return img_set
-
-train_images = contrast_stretch(train_images_us)
-test_images = contrast_stretch(test_images_us)
-
 show_img = np.reshape(test_images[38], (28,28))  
 
-train_images = np.reshape(train_images, (-1, 28,28,1)) 
+train_images = np.reshape(train_images, (-1, 28,28,1)) /255
 
-test_images = np.reshape(test_images, (-1, 28, 28,1))
+test_images = np.reshape(test_images, (-1, 28, 28,1)) /255
 
 
 
