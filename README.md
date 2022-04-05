@@ -15,3 +15,5 @@ Final project for the MAIS202 bootcamp, about classifying images of clothing ite
 - Tensorflow
 - Matplotlib
 - Keras
+- seaborn
+- sklearn
